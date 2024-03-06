@@ -1,0 +1,121 @@
+# command to create reqs files -> pip freeze >requirements.txt
+# commands for alembic -> alembic revision -m "msg"
+                       -> alembic upgrade head/specific version
+                       -> alembic downgrade head/specific version
+
+
+
+
+# installations
+pip install fastapi
+pip install "uvicorn[standard]"
+pip install psycopg
+
+
+
+
+
+
+# command to crate the posts table
+CREATE TABLE public.posts
+(
+    id serial,
+    title character varying NOT NULL,
+    content character varying NOT NULL,
+    published boolean NOT NULL DEFAULT True,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE IF EXISTS public.posts
+    OWNER to postgres;
+
+
+
+### Code that directly connects to Postrgresql without using ORM. --------------------------------------------
+# setting up database connection.
+while True:
+    try:
+        conn = psycopg.connect(("host=localhost port=5432 dbname=fastapi user=postgres password=Suraj@425") ,
+                            row_factory= dict_row)
+        cursor = conn.cursor()
+        print("Database Connection Successfull.")
+        break
+    except Exception as e:
+        print(f" Could Not connect to database. \n Error :: {e}.")
+        time.sleep(2)
+        
+        
+@app.get("/")
+def root():
+    return {'message': 'Hello World, Welcome to my Social Media app.'}
+
+
+@app.get("/posts")
+def get_posts():
+    cursor.execute("""SELECT * FROM posts; """)
+    posts = cursor.fetchall()
+    # print('posts ::', posts)
+    return {'data' : posts}
+
+
+@app.post("/posts", status_code=status.HTTP_201_CREATED)
+def create_posts(post : Post):
+    try:
+        cursor.execute("""INSERT INTO posts (title, content, published) VALUES (%s, %s, %s) RETURNING * """,
+                    (post.title, post.content, post.published))
+        new_post = cursor.fetchone()
+        conn.commit()
+        
+        return {"data" : new_post}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    
+@app.get("/posts/{id}")
+def get_post(id :int):
+    try:
+        cursor.execute("""SELECT * FROM posts WHERE id = %s """, (str(id),))
+        post = cursor.fetchone()
+        if not post:
+            raise HTTPException(status_code= status.HTTP_404_NOT_FOUND,
+                                detail= f"post with id={id} was not found.")
+        return {"post_details" : post}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+ 
+@app.delete("/posts/{id}", status_code= status.HTTP_204_NO_CONTENT)
+def get_post(id :int):
+    try:
+        cursor.execute("""DELETE FROM posts WHERE id = %s RETURNING *""", (str(id),))
+        deleted_post = cursor.fetchone()
+        conn.commit()
+        
+        if not deleted_post:
+            raise HTTPException(status_code= status.HTTP_404_NOT_FOUND,
+                                detail= f"post with id={id} was not found.")
+        return {"post_details" : deleted_post}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+ 
+ 
+@app.put("/posts", status_code=status.HTTP_200_OK)
+def create_posts(id: int, post : Post):
+    try:
+        cursor.execute("""UPDATE posts SET title= %s, content = %s, published = %s WHERE id= %s
+                       RETURNING * """,(post.title, post.content, post.published, str(id)))
+        udpated_post = cursor.fetchone()
+        conn.commit()
+        if not udpated_post:
+            raise HTTPException(status_code= status.HTTP_404_NOT_FOUND,
+                                detail= f"post with id={id} was not found.")
+        return {"post_details" : udpated_post}
+        
+        return {"data" : udpated_post}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+#-------------------------------------------------------------------------------------------------------
