@@ -34,7 +34,7 @@ async def root(response: Response):
         "</style>"
         "</head>"
         "<body>"
-        "<h1>Hello World, Welcome to my Social Media app(Backend)</h1>"
+        "<h1>Hello, Welcome to my Social Media app(Backend).</h1>"
         "<p><strong>How to use the app:</strong></p>"
         "<ol>"
         "<li>Go to <a href='https://social-media-app-fastapi.onrender.com/docs'>https://social-media-app-fastapi.onrender.com/docs</a></li>"
