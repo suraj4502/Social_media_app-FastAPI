@@ -3,7 +3,7 @@ from sqlalchemy.orm import Relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 
-from Social_media.database import Base
+from database import Base
 
 class Post(Base):
     __tablename__ = "posts"
