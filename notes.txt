@@ -3,7 +3,11 @@
                        -> alembic upgrade head/specific version
                        -> alembic downgrade head/specific version
 
-
+# docker commands
+--> docker ps
+--> docker compose up -d
+--> docker compose down
+--> docker exec -it containername bash
 
 
 # installations
@@ -12,7 +16,14 @@ pip install "uvicorn[standard]"
 pip install psycopg
 
 
-
+DATABASE_HOSTNAME = aws-0-ap-south-1.pooler.supabase.com
+DATABASE_PORT = 5432
+DATABASE_PASSWORD = Suraj%40425%404502
+DATABASE_NAME = postgres
+DATABASE_USERNAME = postgres.vkzmrbgiibbyjjzwtcgh
+SECRET_KEY = surajisthesecretKEYafjsdkjfkajkdfsksdkfhk
+ALGORITHM = HS256
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 

@@ -4,8 +4,8 @@ from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-import schemas, database, models
-from config import settings
+from Social_media import schemas, database, models
+from Social_media.config import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 

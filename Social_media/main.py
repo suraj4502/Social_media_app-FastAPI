@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import post, user, auth, vote
+from Social_media.routers import post, user, auth, vote
 
 # import models
 # from database import engine
