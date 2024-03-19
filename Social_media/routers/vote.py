@@ -2,8 +2,8 @@ from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
-from Social_media import models, schemas, oauth2
-from Social_media.database import get_db
+import models, schemas, oauth2
+from database import get_db
 
 
 router = APIRouter(
