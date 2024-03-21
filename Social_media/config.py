@@ -11,11 +11,11 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int
 
     class Config:
-        env_file = ".env"
+        env_file = "Social_media/.env"
 
 try:
-    print("Values Fetched from ENV file.")
     settings = Settings()
+    print("Values Fetched from ENV file.")
 except Exception as e:
     print(f"Error loading settings: {e}")
     settings = None

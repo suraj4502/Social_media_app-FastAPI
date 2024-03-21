@@ -1,6 +1,6 @@
 import pytest
 
-from ..Social_media.calculations import add, divide, BankAccount
+from ..calculations import add, divide, BankAccount, InsufficientFunds
 
 
 @pytest.fixture
@@ -47,4 +47,20 @@ def test_interest():
     account = BankAccount(50)
     account.collect_interest()
     assert int(account.balance) == 55
+    
+@pytest.mark.parametrize("deposited, withdrew, expected", [
+    (200, 100, 100),
+    (50, 10, 40),
+    (1200, 200, 1000)
+
+])
+def test_bank_transaction(zero_bank_account, deposited, withdrew, expected):
+    zero_bank_account.deposit(deposited)
+    zero_bank_account.withdraw(withdrew)
+    assert zero_bank_account.balance == expected
+
+
+def test_insufficient_funds(bank_account):
+    with pytest.raises(InsufficientFunds):
+        bank_account.withdraw(200)
     

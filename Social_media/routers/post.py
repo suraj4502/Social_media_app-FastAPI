@@ -4,8 +4,8 @@ from typing import List, Optional
 from sqlalchemy import select, func
 from sqlalchemy.orm import aliased
 
-import models, schemas, oauth2
-from database import get_db
+from .. import models, schemas, oauth2
+from ..database import get_db
 
 
 router = APIRouter(
