@@ -19,6 +19,6 @@ jobs:
 
       - name: Show dirs
         run: ls
-        
+
       - name: Install Dependencies
-        run: pip install -r Social_media.Social_media/requirements.txt
+        run: pip install -r Social_media/requirements.txt
